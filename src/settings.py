@@ -41,7 +41,9 @@ INSTALLED_APPS = [
     'testapp.apps.TestappConfig',
     'pattern',
     'data_processing'
+
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -52,6 +54,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+
 
 ROOT_URLCONF = 'src.urls'
 

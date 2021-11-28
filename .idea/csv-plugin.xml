@@ -45,7 +45,21 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\src\settings.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\testapp\models.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\testapp\searchtest.py">
           <value>
             <Attribute>
               <option name="separator" value="," />
