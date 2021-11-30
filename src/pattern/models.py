@@ -1,3 +1,4 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
@@ -72,9 +73,9 @@ class Document(models.Model):
                 break
         return refers
 
-class User(models.Model):
+class User(AbstractUser):
     nickname = models.CharField(max_length=64,null=False)
-    password = models.CharField(max_length=64,null=False)
+    avatar = models.ImageField(upload_to='image/avatar', default='iamge/default.png', max_length=100)
     email = models.EmailField(null=False)
     def __str__(self):
         return self.nickname
