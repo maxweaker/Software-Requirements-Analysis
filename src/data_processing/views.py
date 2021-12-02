@@ -8,6 +8,8 @@ from pattern.multiplexing_operation import *
 from elasticsearch import Elasticsearch, helpers
 from django.core.cache import cache
 
+from doc_search.search_options import *
+
 # Create your views here.
 def clean_data(request):
     if request.method == 'POST':
@@ -134,5 +136,7 @@ def import_doc(request):
 
 def test(request):
     if request.method == 'POST':
-
+        #sid = pagingCacheLV1({})['id']
+        #spagingCacheLV2(sid,0)
+        print(docSearch(request))
         return JsonResponse({})

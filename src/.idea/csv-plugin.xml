@@ -24,7 +24,35 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\doc_search\condNode.py">
+          <value>
+            <Attribute>
+              <option name="separator" value=":" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\doc_search\exp_analysis.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\doc_search\search_options.py">
+          <value>
+            <Attribute>
+              <option name="separator" value=":" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\doc_search\temp.py">
+          <value>
+            <Attribute>
+              <option name="separator" value=":" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\doc_search\tmp.py">
           <value>
             <Attribute>
               <option name="separator" value=":" />
