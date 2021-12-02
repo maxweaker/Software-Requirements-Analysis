@@ -50,19 +50,11 @@ action = [
 ]
 helpers.bulk(es, action, request_timeout=1000)
 body = {
-    "size": 200,
+    #"size": 1,
     "query": {
-        "bool": {
-            "should": [
-                {
-                    "match": {
-                        "keywords": "mitotic cell death"
-                    }
-                }
-            ]
-        }
+        "matche_all":{}
     },
 }
 
-res = es.search(index="articles", body=body)
+res = es.search(index="articles", body=body,scroll='5m',scroll_size=5)
 print(res)
