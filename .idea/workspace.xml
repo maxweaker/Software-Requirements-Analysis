@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="126a9bf1-087c-4e70-9253-d33851f8fef8" name="Changes" comment="init database in yt" />
+    <list default="true" id="aecb4bd1-4187-4dc4-99cf-66de59aac3c5" name="Changes" comment="init database in yt">
+      <change beforePath="$PROJECT_DIR$/.idea/Software-Requirements-Analysis.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Software-Requirements-Analysis.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pattern/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/pattern/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pattern/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/pattern/views.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -37,6 +42,11 @@
         <option name="myModuleName" value="Software-Requirements-Analysis" />
       </console-settings>
     </option>
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Program Files (x86)\github\Software-Requirements-Analysis\src" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration name="Unnamed" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
@@ -85,7 +95,7 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="126a9bf1-087c-4e70-9253-d33851f8fef8" name="Changes" comment="" />
+      <changelist id="aecb4bd1-4187-4dc4-99cf-66de59aac3c5" name="Changes" comment="init database in yt" />
       <created>1638186365562</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
