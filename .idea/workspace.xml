@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="aecb4bd1-4187-4dc4-99cf-66de59aac3c5" name="Changes" comment="init database in yt">
-      <change beforePath="$PROJECT_DIR$/.idea/Software-Requirements-Analysis.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Software-Requirements-Analysis.iml" afterDir="false" />
+    <list default="true" id="aecb4bd1-4187-4dc4-99cf-66de59aac3c5" name="Changes" comment="time">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pattern/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/pattern/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pattern/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/pattern/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -109,7 +107,14 @@
       <option name="project" value="LOCAL" />
       <updated>1638279658598</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="time">
+      <created>1638451456862</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1638451456862</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -129,6 +134,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="init database in yt" />
-    <option name="LAST_COMMIT_MESSAGE" value="init database in yt" />
+    <MESSAGE value="time" />
+    <option name="LAST_COMMIT_MESSAGE" value="time" />
   </component>
 </project>

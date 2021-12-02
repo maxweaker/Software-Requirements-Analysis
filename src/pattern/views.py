@@ -46,5 +46,22 @@ def linechart(request):
         return HttpResponse(json.dumps(data))
 
 
+def userinfor(request):
+    if request.method == 'GET':
+        req = json.loads(request)
+        nickname = req.session['nickname']
+        users = User.objects.filter(nickname=nickname)
+        if not users:
+            return HttpResponse(json.dumps({
+                'success': 0,
+            }))
+        user = users[0]
+        data = {
+            'userName': user.nickname,
+            'userType': user.identity,
+            'isQualified': user.isqualified,
+            'selfintroduce': user.selfintroduce,
+        }
+        return HttpResponse(json.dumps(data))
 
 # Create your views here.
