@@ -74,10 +74,26 @@ class Document(models.Model):
         return refers
 
 
+class Record(models.Model):
+    """
+    用户浏览记录
+    """
+    neckname = models.CharField(max_length=64, null=False)
+    dataTime = models.DateTimeField(null=False)
+    DOI = models.CharField(max_length=64, null=False)
+
+
 class User(models.Model):
     nickname = models.CharField(max_length=64, null=False)
     password = models.CharField(max_length=64, null=False)
     email = models.EmailField(null=False)
+    """
+    用整数表示用户身份：
+    0：普通用户
+    1：机构
+    2：专家
+    """
+    identity = models.IntegerField(null=False, default=0)
 
     def __str__(self):
         return self.nickname
