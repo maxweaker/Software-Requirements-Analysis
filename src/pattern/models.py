@@ -2,7 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 import re
 from django.core import validators
-
+import django.utils.timezone as timezone
 
 # Create your models here.
 
@@ -12,10 +12,27 @@ class User(AbstractUser):
     avatar = models.ImageField(upload_to='image/avatar', default='iamge/default.png', max_length=100)
     email = models.EmailField(null=False)
     password = models.CharField(max_length=64, null=False)
+     """
+    用整数表示用户身份：
+    0：普通用户
+    1：机构
+    2：专家
+    """
+    identity = models.IntegerField(null=False, default=0)
+
     def __str__(self):
         return self.nickname
 
 
+class Record(models.Model):
+    """
+    用户浏览记录
+    """
+    neckname = models.CharField(max_length=64, null=False)
+    dataTime = models.DateTimeField(null=False)
+    DOI = models.CharField(max_length=64, null=False)
+
+    
 class Mechanism(User):
     mecName = models.CharField(max_length=128, null=False)
     briefIntro = models.TextField(null=True)
@@ -40,6 +57,7 @@ class Administrators(User):
 class Comment(models.Model):
     nextComment = models.ForeignKey('Comment', on_delete=models.CASCADE, null=True)
     userName = models.CharField(max_length=64)
+    commentTime = models.DateTimeField(null=False,default = timezone.now)
 
 
 class Attestation(models.Model):
