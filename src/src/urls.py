@@ -23,4 +23,5 @@ urlpatterns = [
     path('data_processing/', include('data_processing.urls')),
     path('UserCenter/', include('pattern.urls')),
     re_path(r'^media/(?P<path>.*)', serve, {"document_root": MEDIA_ROOT}),
+
 ]

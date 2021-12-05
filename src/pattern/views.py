@@ -10,6 +10,7 @@ from django.shortcuts import render
 
 
 def reladata(request):
+
     if request.method == 'POST':
         req = simplejson.loads(request)
         nickname = req.session['nickname']
@@ -61,5 +62,4 @@ def userinfor(request):
             'selfIntroduce': user.selfintroduce,
         }
         return JsonResponse((data))
-
 # Create your views here.

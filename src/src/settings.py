@@ -37,7 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+
     'corsheaders',
+
 
     'Home',
     'testapp.apps.TestappConfig',
@@ -91,7 +93,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'apex',
         'USER': 'root',
-        'PASSWORD': '200141qq',
+        'PASSWORD': 'root',
         'HOST': 'localhost',
         'PORT': '3306'
     }
