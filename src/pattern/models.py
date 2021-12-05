@@ -12,6 +12,7 @@ class User(AbstractUser):
     avatar = models.ImageField(upload_to='image/avatar', default='iamge/default.png', max_length=100)
     email = models.EmailField(null=False)
     password = models.CharField(max_length=64, null=False)
+    introduction = models.TextField(default="一名低调的用户")
     """
     用整数表示用户身份：
     0：普通用户
