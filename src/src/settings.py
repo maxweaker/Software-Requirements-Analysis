@@ -42,7 +42,6 @@ INSTALLED_APPS = [
 
 
     'Home',
-    'testapp.apps.TestappConfig',
     'pattern',
     'data_processing'
 
