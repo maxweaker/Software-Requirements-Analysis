@@ -15,18 +15,23 @@ def clean_data(request):
     if request.method == 'POST':
         r = simplejson.loads(request.body)
         DocNum = r['DocNum']
-        fw = 'D:\下载目录\clean\\mag_papers_20.txt'
+        fw = 'D:\下载目录\clean\\org.txt'
         fr = 'D:\下载目录\\mag_papers_20.txt'
         with open(fw, 'w') as file_to_write:
             with open(fr, 'r') as file_to_read:
                 useable = 0
                 while (useable<DocNum):
                     line = file_to_read.readline()
+                    if not line:
+                        break
                     json_dict = json.loads(line)
                     if legalDocDate(json_dict):
                         file_to_write.writelines(line)
                         useable = useable + 1
-    return JsonResponse({'success':True})
+                        if useable % 1000 == 0:
+                            print(format(useable,',')+' docs loaded')
+        
+    return JsonResponse({'success':useable})
 
 def read_data(request):
     if request.method == 'POST':
@@ -45,14 +50,16 @@ def read_data(request):
 
             update = 0
             while (update < file_num):
-                print("creating doc No."+str(update))
                 line = file_to_read.readline()
+                if not line:
+                    break
                 json_dict = json.loads(line)
-                readingHead.pointer = readingHead.pointer + 1
-                readingHead.save()
-
                 doc_list.append(docCreate(json_dict))
                 update = update + 1
+                if update % 1000 == 0:
+                    print("creating doc No."+format(update,','))
+            readingHead.pointer = readingHead.pointer + update
+            readingHead.save()
 
         es = Elasticsearch(["http://127.0.0.1:9200"])
         action = [
