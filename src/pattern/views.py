@@ -10,12 +10,13 @@ from django.shortcuts import render
 
 
 def reladata(request):
-    if request.method == 'GET':
+
+    if request.method == 'POST':
         req = simplejson.loads(request)
         nickname = req.session['nickname']
         users = User.objects.filter(nickname=nickname)
         if not users:
-            return HttpResponse(json.dumps({
+            return JsonResponse(json.dumps({
                 'success': 0,
             }))
         user = users[0]
@@ -25,16 +26,16 @@ def reladata(request):
             'isQualified': user.isqualified,
             'selfIntroduce': user.selfintroduce,
         }
-        return HttpResponse(json.dumps(data), status=200)
+        return JsonResponse(json.dumps(data), status=200)
 
 
 def linechart(request):
-    if request.method == 'GET':
+    if request.method == 'POST':
         req = simplejson.loads(request)
         nickname = req.session['nickname']
         users = User.objects.filter(nickname=nickname)
         if not users:
-            return HttpResponse(json.dumps({
+            return JsonResponse(json.dumps({
                 'success': 0,
             }))
         user = users[0]
@@ -43,25 +44,22 @@ def linechart(request):
             'watchNum':user.watchnum,
             'type':user.type,
         }
-        return HttpResponse(json.dumps(data))
+        return JsonResponse(json.dumps(data))
 
 
 def userinfor(request):
-    if request.method == 'GET':
-        req = json.loads(request)
-        nickname = req.session['nickname']
+    if request.method == 'POST':
+        req = simplejson.loads(request.body)
+        nickname = req['userName']
         users = User.objects.filter(nickname=nickname)
         if not users:
-            return HttpResponse(json.dumps({
-                'success': 0,
-            }))
+            return JsonResponse({'success': 0})
         user = users[0]
         data = {
             'userName': user.nickname,
             'userType': user.identity,
             'isQualified': user.isqualified,
-            'selfintroduce': user.selfintroduce,
+            'selfIntroduce': user.selfintroduce,
         }
-        return HttpResponse(json.dumps(data))
-
+        return JsonResponse((data))
 # Create your views here.

@@ -21,6 +21,7 @@ from src.settings import MEDIA_ROOT
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('data_processing/', include('data_processing.urls')),
+    path('UserCenter/', include('pattern.urls')),
     path('home/', include('Home.urls')),
     path('user/', include('Users.urls')),
     re_path(r'^media/(?P<path>.*)', serve, {"document_root": MEDIA_ROOT}),
