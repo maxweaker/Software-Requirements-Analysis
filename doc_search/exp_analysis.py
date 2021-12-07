@@ -239,7 +239,7 @@ def syntaxAnalysis(tl):
             treeStack.push(tmpStack.pop())
     return treeStack.peek()
 
-keymap = ('doi','title','authors','keywords','year','abstract','fields')
+keymap = ('doi','title','authors','keys','year','abstract','fields')
 
 def searchTransfer(tree,type):
     if tree is None:
@@ -264,7 +264,7 @@ def searchTransfer(tree,type):
                 dict['bool'] = {'must': list}
         return dict
     else:
-        dict = {'match':{keymap[type]: tree.tok.value[1:-1]}}
+        dict = {'term':{keymap[type]: tree.tok.value[1:-1]}}
         if reverse == True:
             return {'bool':{'must_not':dict}}
         else:

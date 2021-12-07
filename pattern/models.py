@@ -11,9 +11,10 @@ class User(AbstractUser):
     nickname = models.CharField(max_length=64,null=False)
     avatar = models.ImageField(upload_to='image/avatar', default='iamge/default.png', max_length=100)
     email = models.EmailField(null=False)
-    password = models.CharField(max_length=64, null=False)
+    password = models.TextField(null=False)
     isqualified = models.BooleanField(default=False)
-    selfintroduce = models.TextField(blank=True)
+    selfintroduce = models.TextField(default="一名低调的用户")
+    #introduction = models.TextField(default="一名低调的用户")
     """
     用整数表示用户身份：
     0：普通用户
@@ -68,3 +69,11 @@ class Attestation(models.Model):
     mecName = models.CharField(max_length=128, null=False)
     operatorID = models.CharField(max_length=32, null=False)
     certificateFile = models.FileField(null=False)
+
+class HotKey(models.Model):
+    content = models.TextField(null=False)
+    visit = models.IntegerField(null=False,default=0)
+
+class emailVerify(models.Model):
+    email = models.EmailField(max_length=64,null=False)
+    randomCode = models.TextField(null=False)

@@ -145,5 +145,10 @@ def test(request):
     if request.method == 'POST':
         #sid = pagingCacheLV1({})['id']
         #spagingCacheLV2(sid,0)
-        print(docSearch(request))
+        id = pagingCacheLV1(request)['id']
+        #spagingCacheLV2(id,0)
+        #print(cache.get(id))
+        #print(cache.get(id+'-citation'))
+        print("sdffffffffff")
         return JsonResponse({})
+        print("sdffffffffff")
