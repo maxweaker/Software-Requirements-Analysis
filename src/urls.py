@@ -23,6 +23,7 @@ urlpatterns = [
     path('data_processing/', include('data_processing.urls')),
     path('home/', include('Home.urls')),
     path('user/', include('Users.urls')),
+    path('search/', include('doc_search.urls')),
     re_path(r'^media/(?P<path>.*)', serve, {"document_root": MEDIA_ROOT}),
 
 ]

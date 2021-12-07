@@ -20,9 +20,9 @@ def docSearch(searche_body):
     #输入示例
     andList = []
     #dataSet =[{'type':1,'content':'\'red\''}]
-    dataSet = [{'type': 3, 'content':'free'}]
+    dataSet = searche_body['keywords']
     #dataSet = [{'type':1,'content':'(\'Leptoquarks\'+\'math\')'},{'type':2,'content':'(\'G. Aad\'+-\'T. Gejo\')'}]
-    isAdvanced = False
+    isAdvanced = searche_body['isAdvanced']
 
     if isAdvanced:
         for data in dataSet:
@@ -53,37 +53,29 @@ def pagingCacheLV1(search_body):
     doc_per_page = 10
     es = Elasticsearch()
     search_cache = {}  # redis临时保存搜索结果
-    body = docSearch(search_body)
-    res = es.search(index="articles", body=body,size = doc_per_page,scroll = '10m')
+    query_body = docSearch(search_body)
+    search_cache['query'] = query_body
+    res = es.search(index="articles", body=query_body,size = doc_per_page,scroll = '10m')
     print(res['hits']['total'])
-    results = res['hits']['hits']
+    doc_list = res['hits']['hits']
+    search_cache['page1'] = doc_list
 
     sid = res['_scroll_id']  # scroll的id,同时也是检索结果页的主键
     search_cache['id'] = sid
     total = res['hits']['total']
+    
     #预加载三页文献(若检索结果大于等于三页)
-    if doc_per_page < total:
-        scroll_size = total
-
-        if scroll_size % doc_per_page == 0:
-            max_page = scroll_size // doc_per_page
-        else:
-            max_page = scroll_size // doc_per_page + 1
-
-        for i in range(1, max_page):
-            next_page = es.scroll(scroll_id=sid, scroll='2m')
-            list = next_page['hits']['hits']
-            for l in list:
-                results.append(l)
-            #results += next_page['hits']['hits']
-            print('results'+str(len(results)))
-
-    search_cache['results'] = results
-    print('results' + str(len(results)))
+    for i in range(1, 3):
+        next_page = es.scroll(scroll_id=sid, scroll='2m')
+        doc_list = next_page['hits']['hits']
+        if len(doc_list) == 0:
+            break
+        search_cache['page'+str(i+1)] = doc_list
+        search_cache['pageNum'] = i+1
 
     cache.set(sid, search_cache, 5 * 60)
     #print(cache.get(sid))
-
+    print(cache.get(sid))
     return {"id":sid,"count":total}
 
 def spagingCacheLV2(sid,sort_type):
@@ -98,3 +90,38 @@ def spagingCacheLV2(sid,sort_type):
             print(o['_source']['citation'])
         cache.set(sid+'-citation',{'results':citation_sorted},5*60)
 
+#构造检索结果统计字典
+aggmap = ('keys.keyword','pubYear','authors','fields')
+sortmap = ('pubYear','citation')
+def docAggTransfer(sid):
+    search_cache = cache.get(sid)
+    query = search_cache['query']['query']
+    aggs = {}
+    terms = {'field':'keys.keyword','size':5}
+    aggs['terms_count'] = {'terms':terms}
+    aggDict = {'size':0,'query':query,'aggs':aggs}
+    print(aggDict)
+    es = Elasticsearch()
+    for i in range(4):
+        aggDict['aggs']['terms_count']['terms']['field'] = aggmap[i]
+        res = es.search(index="articles", body=aggDict)
+        print(res['aggregations']['terms_count']['buckets'])
+
+class Preload (threading.Thread):
+    def __init__(self, page, updateNum,sid):
+        threading.Thread.__init__(self)
+        self.page = page
+        self.updateNum = updateNum
+        self.sid = sid
+    def run(self):
+        print ("开始线程：" + self.name)
+        print_time(self.name, self.counter, 5)
+        print ("退出线程：" + self.name)
+
+
+def getPage(sid,page):
+    search_cache = cache.get(sid)
+    pageNum = search_cache['pageNum']
+    if page == pageNum:
+        pass
+    return search_cache['page'+str(page)]
