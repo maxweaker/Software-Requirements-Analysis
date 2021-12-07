@@ -3,7 +3,7 @@ from django.core.cache import cache
 import json
 from .exp_analysis import *
 from pattern.models import HotKey
-
+import threading
 def hotKeyUpdate(content):
     hotKey = HotKey.objects.filter(content=content)
 
