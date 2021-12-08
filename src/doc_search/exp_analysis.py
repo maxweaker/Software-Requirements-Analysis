@@ -99,6 +99,7 @@ def lexicalAnalysis(data):
     def t_error(t):
         print("Illegal character '%s'" % t.value[0])
         t.lexer.skip(1)
+        raise Exception('ERROR')
 
     # Build the lexer
     lexer = lex.lex()
@@ -239,7 +240,7 @@ def syntaxAnalysis(tl):
             treeStack.push(tmpStack.pop())
     return treeStack.peek()
 
-keymap = ('doi','title','authors','keywords','year','abstract','fields')
+keymap = ('doi','title','authors','keys','pubYear','abstract','fields')
 
 def searchTransfer(tree,type):
     if tree is None:
@@ -264,7 +265,9 @@ def searchTransfer(tree,type):
                 dict['bool'] = {'must': list}
         return dict
     else:
-        dict = {'match':{keymap[type]: tree.tok.value[1:-1]}}
+        dict = {'term':{keymap[type]: tree.tok.value[1:-1]}}
+        if type == 4:
+            dict['term'][keymap[type]] = int(dict['term'][keymap[type]])
         if reverse == True:
             return {'bool':{'must_not':dict}}
         else:

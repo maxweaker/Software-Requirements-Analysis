@@ -98,13 +98,15 @@ def build_index(request):
                                  "type": "keyword"
                              },
                              "title": {
-                                 "type": "text"
+                                 "type": "text",
+                                 "analyzer": "ik_smart"
                              },
                              "authors": {
                                  "type": "keyword"
                              },
                              "keywords": {
-                                 "type": "text"
+                                 "type": "text",
+                                 "analyzer": "ik_smart"
                              },
                              "fields": {
                                  "type": "keyword"
@@ -119,7 +121,8 @@ def build_index(request):
                                  "type": "integer"
                              },
                              "abstract": {
-                                 "type": "text"
+                                 "type": "text",
+                                 "analyzer": "ik_smart"
                              },
                              "citation": {
                                  "type": "integer"
@@ -128,7 +131,7 @@ def build_index(request):
                      }
                  },
                  "settings": {
-                    "number_of_shards": 2,  # 分片数
+                    "number_of_shards": 1,  # 分片数
                      "number_of_replicas": 0  # 副本数
                 },
             }
@@ -145,5 +148,8 @@ def test(request):
     if request.method == 'POST':
         #sid = pagingCacheLV1({})['id']
         #spagingCacheLV2(sid,0)
-        print(docSearch(request))
+        id = pagingCacheLV1(request)['id']
+        #spagingCacheLV2(id,0)
+        #print(cache.get(id))
+        #print(cache.get(id+'-citation'))
         return JsonResponse({})

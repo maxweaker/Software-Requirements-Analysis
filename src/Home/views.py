@@ -58,3 +58,15 @@ class HotExpert(View):
             ret["code"] = 201
             ret["msg"] = "专家数量过少"
         return JsonResponse(ret)
+
+class HotKeyWords(View):
+    def get(self,request):
+        ret = {"code": 200, "msg": "返回成功", "data": []}
+        hotKeys = HotKey.objects.all().order_by('-visit')
+        ret['data'] = [
+            {
+                'word':key.content,
+                'hot':key.visit
+            }
+            for key in hotKeys]
+        return JsonResponse(ret)
