@@ -1,21 +1,23 @@
 from datetime import timedelta, datetime
 from django.utils import timezone
 
-
-def dateCompare(dateA, dateB, days=0, minutes=0, hours=0, weeks=0):
+def datecompare(dateA, dateB, days, minutes, hours, weeks):
     time = timedelta(days=days, minutes=minutes, hours=hours, weeks=weeks)
 
     if dateB.__ge__(dateA + time):
-        return False
-    else:
         return True
+    else:
+        return False
 
 
-def dateAdd(date, days=0, minutes=0, hours=0, weeks=0):
+def dateadd(date, days, minutes, hours, weeks):
     time = date + timedelta(days=days, minutes=minutes, hours=hours, weeks=weeks)
     return time
 
 
-def dateSub(date, days=0, minutes=0, hours=0, weeks=0):
+def datedel(date, days, minutes, hours, weeks):
     time = date - timedelta(days=days, minutes=minutes, hours=hours, weeks=weeks)
     return time
+
+
+

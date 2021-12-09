@@ -1,8 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse
 import simplejson
-from django.utils.timezone import now
-
 from .models import User
 import json
 from pattern.multiplexing_operation import *
@@ -47,26 +45,6 @@ def linechart(request):
         }
         return JsonResponse(data)
 
-
-def userinfor(request):
-    if request.method == 'POST':
-        req = json.loads(request)
-        nickname = req.session['userName']
-        users = User.objects.filter(nickname=nickname)
-        ret = {"code":200,"msg":"寻找成功","data":[]}
-        if not users:
-            ret["code"] = 201
-            ret["msg"] = "用户不存在"
-            return JsonResponse(ret)
-        user = users[0]
-        data = {
-            'userName': user.nickname,
-            'userType': user.identity,
-            'isQualified': user.isqualified,
-            'selfintroduce': user.selfintroduce,
-        }
-        ret["data"].append(data)
-        return HttpResponse(json.dumps(data))
 def pieChart(request):
     if request.method == 'GET':
         ret = {"code": 200, "msg": "返回成功", "data": []}
