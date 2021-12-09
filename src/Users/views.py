@@ -102,10 +102,11 @@ class LogoutView(View):
 def lineChart(request):
     if request.method == 'POST':
         ret = {"code": 200, "msg": "返回成功", "data": []}
-        req = simplejson.loads(request)
+#         req = simplejson.loads(request)
         user = request.user
+        print(user)
         nickname = user.nickname
-        records = Record.objects.filter(nickname=nickname)
+        records = Record.objects.filter(neckname=nickname)
         if not records:
             ret['code'] = 201
             ret['msg'] = '无记录'
@@ -121,13 +122,13 @@ def lineChart(request):
         return JsonResponse(ret)
 
 def pieChart(request):
-    if request.method == 'GET':
+    if request.method == 'POST':
         ret = {"code": 200, "msg": "返回成功", "data": []}
-        req = simplejson.loads(request)
+#         req = simplejson.loads(request)
         user = request.user
         #nickname = req.session['nickname']
-        nickname = user.nicname
-        records = Record.objects.filter(nickname=nickname)
+        nickname = user.nickname
+        records = Record.objects.filter(neckname=nickname)
         if not records:
             ret['code'] = 201
             ret['msg'] = '无记录'
@@ -139,6 +140,7 @@ def pieChart(request):
                 res[record.subject] += 1
             else:
                 res[record.subject] = 1
+        ret['data'].append(res)
         return JsonResponse(ret)
 
 def userinfor(request):
