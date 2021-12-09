@@ -19,10 +19,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="aecb4bd1-4187-4dc4-99cf-66de59aac3c5" name="Changes" comment="time">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Users/views.py" afterDir="false" />
-    </list>
+    <list default="true" id="aecb4bd1-4187-4dc4-99cf-66de59aac3c5" name="Changes" comment="repaia" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -127,12 +124,12 @@
       <workItem from="1638626326712" duration="2574000" />
       <workItem from="1638663489866" duration="7638000" />
     </task>
-    <task id="LOCAL-00001" summary="init database in yt">
-      <created>1638279658598</created>
+    <task id="LOCAL-00001" summary="repaia">
+      <created>1639050820375</created>
       <option name="number" value="00001" />
       <option name="presentableId" value="LOCAL-00001" />
       <option name="project" value="LOCAL" />
-      <updated>1638279658598</updated>
+      <updated>1639050820375</updated>
     </task>
     <task id="LOCAL-00002" summary="time">
       <created>1638451456862</created>
@@ -141,6 +138,7 @@
       <option name="project" value="LOCAL" />
       <updated>1638451456862</updated>
     </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -158,12 +156,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="init database in yt" />
     <MESSAGE value="time" />
-    <option name="LAST_COMMIT_MESSAGE" value="time" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup" timestamp="1638627777618">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1638627777618" />
+    <MESSAGE value="repaia" />
+    <option name="LAST_COMMIT_MESSAGE" value="repaia" />
   </component>
 </project>
