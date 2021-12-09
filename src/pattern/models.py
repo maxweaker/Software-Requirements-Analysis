@@ -3,7 +3,7 @@ from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 import re
 from django.core import validators
-
+import django.utils.timezone as timezone
 
 # Create your models here.
 
@@ -99,6 +99,15 @@ class User(models.Model):
         return self.nickname
 
 
+class Record(models.Model):
+    """
+    用户浏览记录
+    """
+    neckname = models.CharField(max_length=64, null=False)
+    dataTime = models.DateTimeField(null=False)
+    DOI = models.CharField(max_length=64, null=False)
+
+    
 class Mechanism(User):
     mecName = models.CharField(max_length=128, null=False)
     briefIntro = models.TextField(null=True)
@@ -143,6 +152,7 @@ class Refer(models.Model):
 class Comment(models.Model):
     nextComment = models.ForeignKey('Comment', on_delete=models.CASCADE, null=True)
     userName = models.CharField(max_length=64)
+    commentTime = models.DateTimeField(null=False,default = timezone.now)
 
 
 class Attestation(models.Model):
@@ -151,3 +161,11 @@ class Attestation(models.Model):
     mecName = models.CharField(max_length=128, null=False)
     operatorID = models.CharField(max_length=32, null=False)
     certificateFile = models.FileField(null=False)
+
+class HotKey(models.Model):
+    content = models.TextField(null=False)
+    visit = models.IntegerField(null=False,default=0)
+
+class emailVerify(models.Model):
+    email = models.EmailField(max_length=64,null=False)
+    randomCode = models.TextField(null=False)

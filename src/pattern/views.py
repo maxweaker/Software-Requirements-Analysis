@@ -9,64 +9,43 @@ from pattern.multiplexing_operation import *
 
 from elasticsearch import Elasticsearch, helpers
 from django.shortcuts import render
-from ..library.time import *
+from library.time import *
 
+def reladata(request):
 
-def lineChart(request):
-    if request.method == 'GET':
-        req = simplejson.loads(request)
-        nickname = req.session['nickname']
-        records = Record.objects.filter(nickname=nickname)
-        if not records:
-            return HttpResponse(json.dumps({
-                'success': 0,
-            }))
-        res = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 'success': 1}
-        now = timezone.now()
-        for i in range(5):
-            for record in records:
-                if dateCompare(record.datatime, now, days=i + 1):
-                    res[i] += 1
-                    records.remove(record)
-        return HttpResponse(json.dumps(res))
-
-
-def pieChart(request):
-    if request.method == 'GET':
-        req = simplejson.loads(request)
-        nickname = req.session['nickname']
-        records = Record.objects.filter(nickname=nickname)
-        if not records:
-            return HttpResponse(json.dumps({
-                'success': 0,
-            }))
-        res = {'success': 1}
-        for record in records:
-            if not dateCompare(record.datatime, now, days=5):
-                continue
-            if record.subject in res.keys():
-                res[record.subject] += 1
-            else:
-                res[record.subject] = 1
-        return res
-
-
-def linechart(request):
-    if request.method == 'GET':
+    if request.method == 'POST':
+        ret = {"code": 200, "msg": "返回成功", "data": []}
         req = simplejson.loads(request)
         nickname = req.session['nickname']
         users = User.objects.filter(nickname=nickname)
         if not users:
-            return HttpResponse(json.dumps({
-                'success': 0,
-            }))
+            ret['code'] = 201
+            ret['msg'] = 'user不存在'
+            return JsonResponse(ret)
         user = users[0]
-        data = {
+        ret['userName'] = user.nickname
+        ret['userType'] = user.identity
+        ret['isQualified'] = user.isqualified
+        ret['selfIntroduce'] = user.selfintroduce
+        return JsonResponse(ret)
+
+def linechart(request):
+    if request.method == 'POST':
+        ret = {"code": 200, "msg": "返回成功", "data": []}
+        req = simplejson.loads(request)
+        nickname = req.session['nickname']
+        users = User.objects.filter(nickname=nickname)
+        if not users:
+            ret['code'] = 201
+            ret['msg'] = 'user不存在'
+            return JsonResponse(ret)
+        user = users[0]
+        ret['data'] = {
             'date':user.data,
             'watchNum':user.watchnum,
             'type':user.type,
         }
-        return HttpResponse(json.dumps(data))
+        return JsonResponse(data)
 
 
 def userinfor(request):
@@ -88,5 +67,34 @@ def userinfor(request):
         }
         ret["data"].append(data)
         return HttpResponse(json.dumps(data))
+def pieChart(request):
+    if request.method == 'GET':
+        ret = {"code": 200, "msg": "返回成功", "data": []}
+        req = simplejson.loads(request)
+        user = request.user
+        #nickname = req.session['nickname']
+        nickname = user.nicname
+        records = Record.objects.filter(nickname=nickname)
+        if not records:
+            ret['code'] = 201
+            ret['msg'] = '无记录'
+            return JsonResponse(ret)
+        for record in records:
+            if not datecompare(record.datatime, now, days=5):
+                continue
+            if record.subject in res.keys():
+                res[record.subject] += 1
+            else:
+                res[record.subject] = 1
+        return JsonResponse(ret)
 
-# Create your views here.
+def userinfor(request):
+    if request.method == 'POST':
+        ret = {"code": 200, "msg": "返回成功", "data": []}
+        user = request.user
+        print(type(user.nickname))
+        ret['userName'] = user.nickname
+        ret['userType'] = user.identity
+        ret['isQualified'] = user.isqualified
+        ret['selfIntroduce'] = user.selfintroduce
+        return JsonResponse(ret)
