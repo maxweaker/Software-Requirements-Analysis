@@ -99,23 +99,26 @@ class LogoutView(View):
         return JsonResponse(ret)
 
 
-def linechart(request):
+def lineChart(request):
     if request.method == 'POST':
         ret = {"code": 200, "msg": "返回成功", "data": []}
         req = simplejson.loads(request)
-        nickname = req.session['nickname']
-        users = User.objects.filter(nickname=nickname)
-        if not users:
+        user = request.user
+        nickname = user.nickname
+        records = Record.objects.filter(nickname=nickname)
+        if not records:
             ret['code'] = 201
-            ret['msg'] = 'user不存在'
+            ret['msg'] = '无记录'
             return JsonResponse(ret)
-        user = users[0]
-        ret['data'] = {
-            'date':user.data,
-            'watchNum':user.watchnum,
-            'type':user.type,
-        }
-        return JsonResponse(data)
+        res = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0}
+        now = timezone.now()
+        for i in range(5):
+            for record in records:
+                if dateCompare(record.datatime, now, days=i + 1):
+                    res[i] += 1
+                    records.remove(record)
+        ret['data'].append = res
+        return JsonResponse(ret)
 
 def pieChart(request):
     if request.method == 'GET':
