@@ -20,13 +20,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="aecb4bd1-4187-4dc4-99cf-66de59aac3c5" name="Changes" comment="time">
-      <change beforePath="$PROJECT_DIR$/.idea/Software-Requirements-Analysis.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Software-Requirements-Analysis.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Home/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Home/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Home/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Home/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pattern/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/pattern/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/src/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/src/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Users/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Users/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -122,7 +117,7 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="be9b8e80-1a7f-448e-8186-301c2fe3fc9e" name="Changes" comment="" />
+      <changelist id="aecb4bd1-4187-4dc4-99cf-66de59aac3c5" name="Changes" comment="time" />
       <created>1639049087079</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
