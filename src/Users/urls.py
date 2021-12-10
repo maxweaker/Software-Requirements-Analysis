@@ -8,4 +8,5 @@ urlpatterns = [
     path('chartLine', linechart, name='chartLine'),
     path('chartPie', pieChart, name='chartPie'),
     path('UserInfo', userinfor, name='UserInfo'),
+    path('emailcheck', authen_email.as_view(), name='checkemail'),
 ]

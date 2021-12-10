@@ -7,9 +7,10 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.views import View
-
+from .send_email import *
 from pattern.models import *
 from library.time import *
+import simplejson
 
 import simplejson
 
@@ -38,7 +39,6 @@ class RegisterView(View):
     def post(self, request):
         req = simplejson.loads(request.body)
         ret = {"code": 200, "msg": "注册成功"}
-        #try:
         nickname = req['nickname']
         email = req['email']
         password = req['password']
@@ -51,6 +51,15 @@ class RegisterView(View):
             ret["code"] = 202
             ret["msg"] = "该用户名已被占用"
             return JsonResponse(ret)
+
+        auth_code = req['auth_code']
+        a_res = emailVerify.objects.filter(email=email, randomCode=auth_code)
+        if not a_res.exists():
+            ret["code"] = 203
+            ret["msg"] = "验证码错误"
+            return JsonResponse(ret)
+        a_res.delete()
+
         exist_user = User.objects.filter(email=email)
         if len(exist_user) > 0:
             ret["code"] = 203
@@ -60,6 +69,7 @@ class RegisterView(View):
             ret["code"] = 204
             ret["msg"] = "邮箱不合法"
             return JsonResponse(ret)
+
         user = User.objects.create(nickname=nickname, email=email)
         user.password = make_password(password)
         user.username = email
@@ -68,7 +78,7 @@ class RegisterView(View):
             img_src = request.FILES.get("avatar")
             user.avatar = img_src
         user.save()
-        #except:
+
         #    ret["code"] = 201
         return JsonResponse(ret)
 
@@ -111,11 +121,13 @@ def linechart(request):
             return JsonResponse(ret)
         user = users[0]
         ret['data'] = {
-            'date':user.data,
-            'watchNum':user.watchnum,
-            'type':user.type,
+            'date': user.data,
+            'watchNum': user.watchnum,
+            'type': user.type,
         }
-        return JsonResponse(data)
+        return JsonResponse(ret)
+
+
 
 def pieChart(request):
     if request.method == 'GET':
@@ -148,3 +160,24 @@ def userinfor(request):
         ret['isQualified'] = user.isqualified
         ret['selfIntroduce'] = user.selfintroduce
         return JsonResponse(ret)
+      
+class authen_email(View):
+    def post(self, request):
+        ret = {"code": 200, "msg": "返回成功"}
+        req = simplejson.loads(request.body)
+        email = req['email']
+        if User.objects.filter(email=email).exists():
+            ret["msg"] = "此邮箱已被占用"
+            ret["code"] = 201
+            return JsonResponse(ret)
+        if not VerifyEmail(email):
+            ret["msg"] = "邮箱不合法"
+            ret["code"] = 202
+            return JsonResponse(ret)
+        emailVerify.objects.filter(email=email).delete()
+        res = send_my_email(email)
+        if res != 1:
+            ret["code"] = 203
+            ret["msg"] = "发送失败，请您稍后重试"
+        return JsonResponse(ret)
+

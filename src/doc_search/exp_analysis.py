@@ -2,6 +2,7 @@ import ply.lex as lex
 import re
 from collections import deque
 # List of token names.   This is always required
+from .mutualTranslation import *
 
 class Stack(object):
 
@@ -81,7 +82,9 @@ def lexicalAnalysis(data):
     t_AND   = r'\*'
     t_LPAREN  = r'\('
     t_RPAREN  = r'\)'
-    t_EQ = r'((AU|TI|KY|AB|SU|DOI|YE)=)?\'(\d|[a-z]|[A-Z]|\s|\.)+\''
+    termReg = r'\'(\d|[a-z]|[A-Z]|\s|\.|[\u4e00-\u9fa5])+\''
+    matchReg = r'\"(\d|[a-z]|[A-Z]|\s|\.|[\u4e00-\u9fa5])+\"'
+    t_EQ = r'((AU|TI|KY|AB|SU|DOI|YE)=)?'+ '('+termReg+'|'+matchReg+')'
 
     # A regular expression rule with some action code
     def t_NUMBER(t):
@@ -242,7 +245,7 @@ def syntaxAnalysis(tl):
 
 keymap = ('doi','title','authors','keys','pubYear','abstract','fields')
 
-def searchTransfer(tree,type):
+def searchTransfer(tree,type,languageExtension):
     if tree is None:
         return
     nodeType = tree.tok.type
@@ -250,8 +253,8 @@ def searchTransfer(tree,type):
     if nodeType != 'EQ':
         list = []
         dict = {}
-        list.append(searchTransfer(tree.lnode,type))
-        list.append(searchTransfer(tree.rnode,type))
+        list.append(searchTransfer(tree.lnode,type,languageExtension))
+        list.append(searchTransfer(tree.rnode,type,languageExtension))
         if nodeType == 'OR':
             if reverse == True:
                 dict['bool'] = {'must_not':{'bool': {'should': list}}}
@@ -265,11 +268,33 @@ def searchTransfer(tree,type):
                 dict['bool'] = {'must': list}
         return dict
     else:
-        dict = {'term':{keymap[type]: tree.tok.value[1:-1]}}
-        if type == 4:
-            dict['term'][keymap[type]] = int(dict['term'][keymap[type]])
-        if reverse == True:
-            return {'bool':{'must_not':dict}}
+        content = tree.tok.value[1:-1]
+        match = None
+        if str(tree.tok.value[0]) == '\'':
+            match = 'term'
         else:
-            return dict
+            match = 'match'
+        initDict = {match:{keymap[type]:content}}
+        if type == 4:
+            initDict[match][keymap[type]] = int(initDict[match][keymap[type]])
 
+        if languageExtension and type != 4:
+            finalDict = {}
+            lang = langDistinguish(content)
+            extendDict = {}
+            if lang == 'en':
+                extendDict[match] = {keymap[type]:enToZh(content)}
+            else:
+                extendDict[match] = {keymap[type]: zhToEn(content).lower()}
+            shouldList = [initDict,extendDict]
+            finalDict = {'bool':{'should':shouldList}}
+
+            if reverse == True:
+                return  {'bool':{'must_not':finalDict}}
+            else:
+                return finalDict
+        else:
+            if reverse == True:
+                return  {'bool':{'must_not':initDict}}
+            else:
+                return initDict

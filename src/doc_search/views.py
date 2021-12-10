@@ -1,25 +1,31 @@
-from django.http import JsonResponse
 # Create your views here.
 from django.core.cache import cache
 from .search_options import *
 import simplejson
 from .search_options import *
+from django.http import JsonResponse
+
 
 def searchTest(request):
     if request.method == 'POST':
+        dataSet = [{'type': 1, 'content':'computer'}]
         dataSet = [{'type': 1, 'content':'shift'}]
         isAdvanced = False
         ret = pagingCacheLV1({'keywords': dataSet,'isAdvanced':isAdvanced})
+        docAggTransfer(ret['id'])
+    return JsonResponse({"r":True})
         #docAggTransfer(ret['id'])
     return JsonResponse({"ret":ret})
 
 def cacheTest(request):
     if request.method == 'POST':
-        re = {}
-        re['result'] = [1,3,4]
+
         cache.set('pzt',re,5*60)
         print(cache.get('pzt'))
 
+        a = cache.get('pzt')['result']
+        #print(dict)
+        #dict.append(5)
         a = cache.get('pzt')
         a['geg'] = 32
         cache.set('pzt',a,5*60)
@@ -84,3 +90,4 @@ def sendFilters(request):
         req = simplejson.loads(request.body)
         ret = sortAndFilt(req)
         return JsonResponse(ret)
+

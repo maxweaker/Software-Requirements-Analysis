@@ -9,4 +9,5 @@ urlpatterns = [
     path('send', views.sendQuery, name='send'),
     path('getStatistics', views.getStatistics, name='getStatistics'),
     path('sendFilters', views.sendFilters, name='sendFilters')
+
 ]
