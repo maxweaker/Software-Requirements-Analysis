@@ -27,13 +27,15 @@ class User(AbstractUser):
         return self.nickname
 
 
-class Record(models.Model):
+class BrowseRecord(models.Model):
     """
     用户浏览记录
     """
-    neckname = models.CharField(max_length=64, null=False)
-    dataTime = models.DateTimeField(null=False)
-    DOI = models.CharField(max_length=64, null=False)
+    nickname = models.CharField(max_length=64, null=False)
+    browseTime = models.DateTimeField(null=False)
+    docID = models.CharField(max_length=64, null=False)
+    docType = models.CharField(max_length=32,null=False)
+    docField = models.CharField(max_length=64,null=False)
 
     
 class Mechanism(User):
@@ -43,7 +45,7 @@ class Mechanism(User):
 
 
 class Expert(User):
-    EID = models.CharField(max_length=32, primary_key=True)
+    EID = models.CharField(max_length = 64,null=False)
 
     mec = models.ForeignKey('Mechanism', on_delete=models.CASCADE, null=True)
 
