@@ -16,7 +16,7 @@ def legalDocDate(dict):
 
 DocNum = 1000000
 fw = 'D:\下载目录\clean\\org_final.txt'
-fr = 'D:\下载目录\\mag_papers_20.txt'
+fr = 'D:\下载目录\\mag_papers_21.txt'
 with open(fw, 'a') as file_to_write:
     with open(fr, 'r') as file_to_read:
         useable = 0
@@ -31,5 +31,4 @@ with open(fw, 'a') as file_to_write:
                 useable = useable + 1
                 if useable % 1000 == 0:
                     print(format(useable,',')+' docs loaded')
-
 print(str(useable) + ' docs finally loaded')

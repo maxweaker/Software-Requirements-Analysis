@@ -3,9 +3,9 @@ import json
 from elasticsearch import Elasticsearch, helpers
 from pattern.multiplexing_operation import legalDocDate,docCreate
 
-file_num = 200000
-fileName = 'D:\下载目录\clean\org4.txt'
-ptr = 0
+file_num = 100000
+fileName = 'D:\下载目录\clean\org_final.txt'
+ptr = 1
 
 doc_list = []
 with open(fileName, 'r') as file_to_read:
@@ -23,7 +23,6 @@ with open(fileName, 'r') as file_to_read:
         if update % 1000 == 0:
             print("creating doc No." + format(update, ','))
 print('updated '+str(update)+' docs finally')
-
 es = Elasticsearch(["http://127.0.0.1:9200"])
 action = [
     {
@@ -36,11 +35,12 @@ action = [
             "pubYear": doc['year'],
             "abstract": doc['abstract'],
             "citation": doc['n_citation'],
-            "type": doc['type'],
+            "type": doc['doc_type'],
             "keys": doc['keywords'],
             "authors": doc['authors'],
             "fields": doc['fos'],
-            "refers": doc['references']
+            "refers": doc['references'],
+            "publisher": doc['publisher']
         }
     } for doc in doc_list]
 helpers.bulk(es, action, request_timeout=1000)
