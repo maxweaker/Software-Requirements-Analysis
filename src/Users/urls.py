@@ -9,4 +9,6 @@ urlpatterns = [
     path('chartPie', pieChart, name='chartPie'),
     path('UserInfo', userinfor, name='UserInfo'),
     path('emailcheck', authen_email.as_view(), name='checkemail'),
+    path('test', mecTest, name='test'),
+
 ]

@@ -9,10 +9,10 @@ from django.shortcuts import render
 from django.views import View
 from .send_email import *
 from pattern.models import *
-from library.time import *
-import simplejson
+
 
 import simplejson
+from  datetime import *
 
 def VerifyEmail(email):
     pattern = r'^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$'
@@ -39,6 +39,7 @@ class RegisterView(View):
     def post(self, request):
         req = simplejson.loads(request.body)
         ret = {"code": 200, "msg": "注册成功"}
+        # try:
         nickname = req['nickname']
         email = req['email']
         password = req['password']
@@ -51,25 +52,14 @@ class RegisterView(View):
             ret["code"] = 202
             ret["msg"] = "该用户名已被占用"
             return JsonResponse(ret)
-
-        auth_code = req['auth_code']
-        a_res = emailVerify.objects.filter(email=email, randomCode=auth_code)
-        if not a_res.exists():
-            ret["code"] = 203
-            ret["msg"] = "验证码错误"
-            return JsonResponse(ret)
-        a_res.delete()
-
-        exist_user = User.objects.filter(email=email)
-        if len(exist_user) > 0:
-            ret["code"] = 203
-            ret["msg"] = "该邮箱已被占用"
-            return JsonResponse(ret)
-        if not VerifyEmail(email):
-            ret["code"] = 204
-            ret["msg"] = "邮箱不合法"
-            return JsonResponse(ret)
-
+        #为注册用户做样例，暂时注释掉邮箱验证
+        # = req['auth_code']
+        #a_res = emailVerify.objects.filter(email=email, randomCode=auth_code)
+        #if not a_res.exists():
+        #    ret["code"] = 203
+        #    ret["msg"] = "验证码错误"
+        #    return JsonResponse(ret)
+        #a_res.delete()
         user = User.objects.create(nickname=nickname, email=email)
         user.password = make_password(password)
         user.username = email
@@ -78,7 +68,7 @@ class RegisterView(View):
             img_src = request.FILES.get("avatar")
             user.avatar = img_src
         user.save()
-
+        # except:
         #    ret["code"] = 201
         return JsonResponse(ret)
 
@@ -110,48 +100,55 @@ class LogoutView(View):
 
 
 def lineChart(request):
-    if request.method == 'POST':
-        ret = {"code": 200, "msg": "返回成功", "data": []}
-#         req = simplejson.loads(request)
-        user = request.user
-        print(user)
-        nickname = user.nickname
-        records = Record.objects.filter(neckname=nickname)
-        if not records:
-            ret['code'] = 201
-            ret['msg'] = '无记录'
-            return JsonResponse(ret)
-        res = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0}
-        now = timezone.now()
-        for i in range(5):
-            for record in records:
-                if dateCompare(record.datatime, now, days=i + 1):
-                    res[i] += 1
-                    records.remove(record)
-        ret['data'].append = res
-        return JsonResponse(ret)
+    #为方便测试，暂时传进nickname做参数,pieChart同样
+    ret = {"code": 200, "msg": "返回成功", "data": []}
+    req = simplejson.loads(request.body)
+    print(req)
+    nickname = req['nickname']
+    user = User.objects.get(nickname = nickname)
+    #user  = request.user
+    now = datetime.now()
+    print(now)
+    retList = []
+    #初始化两组五天内的记录
+    for i in range(5):
+        retList.append({'date':(now-timedelta(days=i)).strftime("%Y-%m-%d") ,'watchNum':0,'type':'Journal'})
+    for i in range(5):
+        retList.append({'date':(now-timedelta(days=i)).strftime("%Y-%m-%d"),'watchNum':0,'type':'Conference'})
+    recods = BrowseRecord.objects.filter(nickname=user.nickname,browseTime__gt=now-timedelta(days=5))
+    for record in recods:
+        if record.docType == 'Journal':
+            subscript = (now - record.browseTime).days
+            retList[subscript]['watchNum'] = retList[subscript]['watchNum'] + 1
+        else:
+            subscript = (now - record.browseTime).days+5
+            retList[subscript]['watchNum'] = retList[subscript]['watchNum'] + 1
+    ret['chartLine'] = retList
+    return JsonResponse(ret)
 
 
 def pieChart(request):
     if request.method == 'POST':
         ret = {"code": 200, "msg": "返回成功", "data": []}
-#         req = simplejson.loads(request)
-        user = request.user
-        #nickname = req.session['nickname']
-        nickname = user.nickname
-        records = Record.objects.filter(neckname=nickname)
-        if not records:
-            ret['code'] = 201
-            ret['msg'] = '无记录'
-            return JsonResponse(ret)
+        req = simplejson.loads(request.body)
+        print(req)
+        nickname = req['nickname']
+        user = User.objects.get(nickname=nickname)
+        # user  = request.user
+        now = datetime.now()
+        print(now)
+        records = BrowseRecord.objects.filter(nickname=user.nickname,browseTime__gt=now-timedelta(days=5))
+        total = len(records)
+        fields = {}
         for record in records:
-            if not datecompare(record.datatime, now, days=5):
-                continue
-            if record.subject in res.keys():
-                res[record.subject] += 1
+            if record.docField in fields:
+                fields[record.docField] = fields[record.docField] + 1
             else:
-                res[record.subject] = 1
-        ret['data'].append(res)
+                fields[record.docField] = 1
+        retList = []
+        for key in fields.keys():
+            retList.append({'subject':key,'ratio':fields[key]/total})
+        ret['chartPie'] = retList
         return JsonResponse(ret)
 
 def userinfor(request):
@@ -164,7 +161,8 @@ def userinfor(request):
         ret['isQualified'] = user.isqualified
         ret['selfIntroduce'] = user.selfintroduce
         return JsonResponse(ret)
-      
+
+
 class authen_email(View):
     def post(self, request):
         ret = {"code": 200, "msg": "返回成功"}
@@ -185,3 +183,13 @@ class authen_email(View):
             ret["msg"] = "发送失败，请您稍后重试"
         return JsonResponse(ret)
 
+
+def mecTest(request):
+    if request.method == 'POST':
+        ret = {"code": 200, "msg": "返回成功"}
+        #req = simplejson.loads(request.body)
+        req = {}
+        mec = Mechanism.objects.all()
+        for m in mec:
+            print(m.pk)
+        return JsonResponse(ret)
