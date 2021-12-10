@@ -5,10 +5,11 @@ from .exp_analysis import *
 from pattern.models import HotKey
 import threading
 import copy
+from .mutualTranslation import *
 
 aggmap = ('keys.keyword','pubYear','authors','fields')
 sortmap = ('pubYear','citation')
-typemap = ('doi','title','authors','keys','pubYear','abstract','fields')
+typemap = ('doi','title','authors','keys','pubYear','abstract','fields','citation')
 
 _source = ['title', 'pubYear','authors','fields','citation']
 original_query = {
@@ -19,6 +20,11 @@ original_query = {
                     'filter':{}
             }
         }
+should_dict = {
+    'bool':{
+        'should':[]
+    }
+}
 original_dict = {'query':original_query,'_source':_source,'sort':[]}
 doc_per_page = 10
 
@@ -41,6 +47,7 @@ def docSearch(searche_body):
     dataSet = searche_body['keywords']
     #dataSet = [{'type':1,'content':'(\'Leptoquarks\'+\'math\')'},{'type':2,'content':'(\'G. Aad\'+-\'T. Gejo\')'}]
     isAdvanced = searche_body['isAdvanced']
+    languageExtension = searche_body['languageExtension']
 
     if isAdvanced:
         for data in dataSet:
@@ -55,7 +62,7 @@ def docSearch(searche_body):
             except Exception:
                 return {'success':False,'code':202,'msg':'语法分析错误'}
             #根据表达式树构造查询字典
-            bool_dict = (searchTransfer(tree,data['type']))
+            bool_dict = (searchTransfer(tree,data['type'],languageExtension))
             andList.append(bool_dict)
         finalLogic = {'must':andList}
         finalDict = copy.deepcopy(original_dict)
@@ -70,8 +77,18 @@ def docSearch(searche_body):
         if type == 3:
             hotKeyUpdate(content)
         finalDict = copy.deepcopy(original_dict)
-        finalDict['query']['bool']['filter'] = {'term':{keymap[type]:content}}
-
+        initDict = {'match':{keymap[type]:content}}
+        if languageExtension:
+            lang = langDistinguish(content)
+            extendDict = {}
+            if lang == 'en':
+                extendDict['match'] = {keymap[type]:enToZh(content)}
+            else:
+                extendDict['match'] = {keymap[type]: zhToEn(content).lower()}
+            shouldList = [initDict,extendDict]
+            finalDict['query']['bool']['filter'] = {'bool':{'should':shouldList}}
+        else:
+            finalDict['query']['bool']['filter'] = initDict
         print(finalDict)
         return finalDict
 
@@ -171,7 +188,7 @@ def get_page(sid,page):
 def sortAndFilt(req):
     # 构造排序字典
     sid = req['id']
-
+    print(req)
     sortDict = {}
     sortField = typemap[req['sort']['type']]
     sortOrder = req['sort']['order']
@@ -242,5 +259,4 @@ def sortAndFilt(req):
     preload = Preload(1, 3, sid)
     preload.start()
     preload.join()
-
     return {"id": sid, "count": total, 'success': True}

@@ -138,18 +138,3 @@ def build_index(request):
         res1 = es.indices.create(index='articles', body=config)
 
         return JsonResponse({"success":True})
-
-def import_doc(request):
-    if request.method == 'POST':
-        return JsonResponse({"success":True})
-
-
-def test(request):
-    if request.method == 'POST':
-        #sid = pagingCacheLV1({})['id']
-        #spagingCacheLV2(sid,0)
-        id = pagingCacheLV1(request)['id']
-        #spagingCacheLV2(id,0)
-        #print(cache.get(id))
-        #print(cache.get(id+'-citation'))
-        return JsonResponse({})
