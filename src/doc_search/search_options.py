@@ -259,5 +259,4 @@ def sortAndFilt(req):
     preload = Preload(1, 3, sid)
     preload.start()
     preload.join()
-
     return {"id": sid, "count": total, 'success': True}

@@ -31,4 +31,5 @@ with open(fw, 'a') as file_to_write:
                 useable = useable + 1
                 if useable % 1000 == 0:
                     print(format(useable,',')+' docs loaded')
+
 print(str(useable) + ' docs finally loaded')

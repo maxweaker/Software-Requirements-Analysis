@@ -10,9 +10,9 @@ from django.views import View
 from .send_email import *
 from pattern.models import *
 from library.time import *
-
 import simplejson
 
+import simplejson
 
 def VerifyEmail(email):
     pattern = r'^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$'
@@ -39,7 +39,6 @@ class RegisterView(View):
     def post(self, request):
         req = simplejson.loads(request.body)
         ret = {"code": 200, "msg": "注册成功"}
-        # try:
         nickname = req['nickname']
         email = req['email']
         password = req['password']
@@ -52,6 +51,7 @@ class RegisterView(View):
             ret["code"] = 202
             ret["msg"] = "该用户名已被占用"
             return JsonResponse(ret)
+
         auth_code = req['auth_code']
         a_res = emailVerify.objects.filter(email=email, randomCode=auth_code)
         if not a_res.exists():
@@ -59,6 +59,17 @@ class RegisterView(View):
             ret["msg"] = "验证码错误"
             return JsonResponse(ret)
         a_res.delete()
+
+        exist_user = User.objects.filter(email=email)
+        if len(exist_user) > 0:
+            ret["code"] = 203
+            ret["msg"] = "该邮箱已被占用"
+            return JsonResponse(ret)
+        if not VerifyEmail(email):
+            ret["code"] = 204
+            ret["msg"] = "邮箱不合法"
+            return JsonResponse(ret)
+
         user = User.objects.create(nickname=nickname, email=email)
         user.password = make_password(password)
         user.username = email
@@ -67,7 +78,7 @@ class RegisterView(View):
             img_src = request.FILES.get("avatar")
             user.avatar = img_src
         user.save()
-        # except:
+
         #    ret["code"] = 201
         return JsonResponse(ret)
 
@@ -117,6 +128,7 @@ def linechart(request):
         return JsonResponse(ret)
 
 
+
 def pieChart(request):
     if request.method == 'GET':
         ret = {"code": 200, "msg": "返回成功", "data": []}
@@ -148,8 +160,7 @@ def userinfor(request):
         ret['isQualified'] = user.isqualified
         ret['selfIntroduce'] = user.selfintroduce
         return JsonResponse(ret)
-
-
+      
 class authen_email(View):
     def post(self, request):
         ret = {"code": 200, "msg": "返回成功"}
@@ -169,3 +180,4 @@ class authen_email(View):
             ret["code"] = 203
             ret["msg"] = "发送失败，请您稍后重试"
         return JsonResponse(ret)
+

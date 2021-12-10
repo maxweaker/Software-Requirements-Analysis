@@ -42,7 +42,6 @@ INSTALLED_APPS = [
 
 
     'Home',
-    'testapp.apps.TestappConfig',
     'pattern',
     'data_processing'
 
@@ -59,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'userMiddleware.LoginCheckMiddleware'
 ]
 
 
@@ -93,7 +93,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'apex',
         'USER': 'root',
-        'PASSWORD': 'root',
+        'PASSWORD': '200141qq',
         'HOST': 'localhost',
         'PORT': '3306'
     }
@@ -152,7 +152,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)

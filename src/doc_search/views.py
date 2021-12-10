@@ -90,3 +90,4 @@ def sendFilters(request):
         req = simplejson.loads(request.body)
         ret = sortAndFilt(req)
         return JsonResponse(ret)
+
