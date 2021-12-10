@@ -200,3 +200,11 @@ CORS_ALLOW_CREDENTIALS = True
 # 允许所有主机执行跨站点请求，默认为False
 # 如果没设置该参数，则必须设置白名单，运行部分白名单的主机才能执行跨站点请求
 CORS_ORIGIN_ALLOW_ALL = True
+EMAIL_HOST = "smtp.163.com"  # SMTP服务器主机
+EMAIL_PORT = 465  # 端口
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST_USER = "lovingjiang1@163.com"  # 邮箱地址
+EMAIL_HOST_PASSWORD = "XADFOXVLZRFCQETM"  # 授权码
+EMAIL_USE_SSL = True
+EMAIL_FROM = "apex学术平台<lovingjiang1@163.com>"  # 收件人看到的发件人
+
