@@ -28,6 +28,17 @@ should_dict = {
 original_dict = {'query':original_query,'_source':_source,'sort':[]}
 doc_per_page = 10
 
+def getDocBy_Id(id):
+    es = Elasticsearch()
+    search_cache = {}  # redis临时保存搜索结果
+    query_body = copy.deepcopy(original_query)
+    query_body['bool']['filter'] = {"term": {"_id": id}}
+    print(query_body)
+    res = es.search(index="articles", body={'query':query_body})
+    doc_list = res['hits']['hits']
+    print(doc_list)
+    return doc_list[0]
+
 def hotKeyUpdate(content):
     hotKey = HotKey.objects.filter(content=content)
 
@@ -259,4 +270,5 @@ def sortAndFilt(req):
     preload = Preload(1, 3, sid)
     preload.start()
     preload.join()
+
     return {"id": sid, "count": total, 'success': True}

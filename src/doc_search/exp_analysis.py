@@ -298,3 +298,8 @@ def searchTransfer(tree,type,languageExtension):
                 return  {'bool':{'must_not':initDict}}
             else:
                 return initDict
+
+
+
+
+

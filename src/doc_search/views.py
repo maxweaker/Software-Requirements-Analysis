@@ -4,18 +4,17 @@ from .search_options import *
 import simplejson
 from .search_options import *
 from django.http import JsonResponse
-
+from pattern.models import *
+from datetime import *
 
 def searchTest(request):
     if request.method == 'POST':
-        dataSet = [{'type': 1, 'content':'computer'}]
-        dataSet = [{'type': 1, 'content':'shift'}]
-        isAdvanced = False
-        ret = pagingCacheLV1({'keywords': dataSet,'isAdvanced':isAdvanced})
-        docAggTransfer(ret['id'])
-    return JsonResponse({"r":True})
-        #docAggTransfer(ret['id'])
-    return JsonResponse({"ret":ret})
+        req = simplejson.loads(request.body)
+        ret = getDocBy_Id(req['docID'])['_source']
+        BrowseRecord.objects.create(nickname=req['nickname'],browseTime=datetime.now(),
+                                    docID=req['docID'],docType=ret['type'],
+                                    docField=ret['fields'][0])
+    return JsonResponse({"success":True})
 
 def cacheTest(request):
     if request.method == 'POST':
@@ -91,3 +90,12 @@ def sendFilters(request):
         ret = sortAndFilt(req)
         return JsonResponse(ret)
 
+def getDocDetails(request):
+    if request.method == 'POST':
+        ret = {"code": 200, "msg": "返回成功", "data": []}
+        req = simplejson.loads(request.body)
+
+
+
+        statistics['success'] = True
+        return JsonResponse(statistics)
