@@ -30,7 +30,6 @@ doc_per_page = 10
 
 def getDocBy_Id(id):
     es = Elasticsearch()
-    search_cache = {}  # redis临时保存搜索结果
     query_body = copy.deepcopy(original_query)
     query_body['bool']['filter'] = {"term": {"_id": id}}
     print(query_body)
